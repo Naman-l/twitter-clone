@@ -1,4 +1,4 @@
-import React,{forwardRef} from "react";
+import React from "react";
 import "./Post.css";
 import { Avatar } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
@@ -6,42 +6,113 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import PublishIcon from "@material-ui/icons/Publish";
+import db from "./Firebase";
 
-const Post=forwardRef(
-    ({displayName,username,verified,text,image,avatar},ref)=> {  
-    return (
-        <div className="post" ref={ref}>
-            <div className="post__avatar">
-                <Avatar src="https://pbs.twimg.com/profile_images/1334857107137433602/xJ248kOj_400x400.jpg"></Avatar>
-                
-            </div>
-            <div className="post__body">
-                <div className="post__header">
-                    <div className="post__headerText">
-                        <h3>
-                            {displayName}{""}
-                            <span className="post__headerSpecial">
-                                {verified && <VerifiedUserIcon className="post__badge"/>}@{username}
-                            </span>
-                        </h3>
-                    </div>
-                    <div className="post__headerDescription">
-                        <p>{text} </p>
-                    </div>
-                    </div>
-                    <img src={image} alt=""/>
-                    <div className="post__footer">
-                        <ChatBubbleOutlineIcon fontSize="small" />
-                        <RepeatIcon fontSize="small" />
-                        <FavoriteBorderIcon fontSize="small" />
-                        <PublishIcon fontSize="small" />
-                    </div>
+// const Post = forwardRef(
+//   (
+//     { displayName, username, verified, text, image, avatar, id, likes },
+//     ref
+//   ) => {
+//     return (
+//       <div className="post" ref={ref}>
+//         <div className="post__avatar">
+//           <Avatar src="https://pbs.twimg.com/profile_images/1334857107137433602/xJ248kOj_400x400.jpg"></Avatar>
+//         </div>
+//         <div className="post__body">
+//           <div className="post__header">
+//             <div className="post__headerText">
+//               <h3>
+//                 {displayName}
+//                 {""}
+//                 <span className="post__headerSpecial">
+//                   {verified && <VerifiedUserIcon className="post__badge" />}@
+//                   {username}
+//                 </span>
+//               </h3>
+//             </div>
+//             <div className="post__headerDescription">
+//               <p>{text} </p>
+//             </div>
+//           </div>
+//           <img src={image} alt="" />
 
-                
-            </div>
-            
+//           <div className="post__footer">
+//             <ChatBubbleOutlineIcon fontSize="small" />
+//             <RepeatIcon fontSize="small" />
+//             <FavoriteBorderIcon fontSize="small" />
+//             <PublishIcon fontSize="small" />
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   }
+// );
+
+const Post = ({
+  displayName,
+  username,
+  verified,
+  text,
+  image,
+  avatar,
+  id,
+  likes,
+}) => {
+  const UpdateTweet = (e) => {
+    e.preventDefault();
+    db.collection("posts").doc("2PRl8xmzf9wDRBPHDAPy").update({
+      like: true,
+    });
+    // db.collection("posts")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       // doc.data() is never undefined for query doc snapshots
+    //       console.log(doc.id, " => ", doc.data());
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting documents: ", error);
+    //   });
+  };
+
+  return (
+    <div
+      className="post"
+      onClick={(e) => {
+        UpdateTweet(e);
+      }}
+    >
+      <div className="post__avatar">
+        <Avatar src="https://pbs.twimg.com/profile_images/1334857107137433602/xJ248kOj_400x400.jpg"></Avatar>
+      </div>
+      <div className="post__body">
+        <div className="post__header">
+          <div className="post__headerText">
+            <h3>
+              {displayName}
+              {""}
+              <span className="post__headerSpecial">
+                {verified && <VerifiedUserIcon className="post__badge" />}@
+                {username}
+              </span>
+            </h3>
+          </div>
+          <div className="post__headerDescription">
+            <p>{text} </p>
+          </div>
         </div>
-        );
-    }
-);
-export default Post
+        <img src={image} alt="" />
+
+        <div className="post__footer">
+          <ChatBubbleOutlineIcon fontSize="small" />
+          <RepeatIcon fontSize="small" />
+          <FavoriteBorderIcon fontSize="small" />
+          <PublishIcon fontSize="small" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Post;
